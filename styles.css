@@ -3,29 +3,26 @@ body {
 	height: 90vh;
 	color: #fff;
 	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-	background-size: 400% 400%;
+    background-size: 400% 400%;
+    overflow: hidden;    
+    position: relative;
 	-webkit-animation: Gradient 15s ease infinite;
 	-moz-animation: Gradient 15s ease infinite;
     animation: Gradient 15s ease infinite;
-    overflow: hidden;
 }
 
 .flex-content {    
     display: flex;
     align-items: center;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
+    background-size: auto;
+    top: 20%;
+    left: 20%;
+    right: 20%;
+    bottom: 20%;
+    margin: 0;
     justify-content: center;
-    position: absolute;
-}
-
-.flex-content::before {
-    content: "";
-}
-  
-.flex-content::after {
-    content: "";
+    position: absolute;    
 }
 
 .icons {
