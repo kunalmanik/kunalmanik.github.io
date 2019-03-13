@@ -18,11 +18,7 @@ body {
     width: 100%;
     justify-content: center;
     position: absolute;
-  
-    -webkit-animation: gradientShift 15s ease infinite;
-    -moz-animation: gradientShift 15s ease infinite;
-    animation: gradientShift 15s ease infinite;
-  }
+}
 
 h1 {
     font-family: 'Raleway', 'Helvetica', 'Arial', sans-serif;
@@ -31,20 +27,19 @@ h1 {
     line-height: .8em;
     -webkit-margin-after: 0;
     -webkit-margin-before: 0;
-  }
+}
   
-  h2 {
+h2 {
     font-size: 1.2em;
     font-weight: 300;
     margin: 5px 0;
-  }
+}
   
-  h1, h2 {
+h1, h2 {
     text-shadow: rgba(0, 0, 0, .2) 0 2px 3px;
-  }
+}
 
-.box
-{
+.box {
 	margin: 0 2.2em;
 	display: inline-block;
 	height: 3.3em;
@@ -53,23 +48,21 @@ h1 {
 	color: white;
 }
 
-.icn
-{
+.icn {
 	text-align: center;
 	vertical-align: middle;
 	font-size: 2em;
 	color: white;
-	height: 3em;
-	width: 3em;
-	line-height: 3em;
+	height: 2em;
+	width: 2em;
+	line-height: 2em;
 	display: inline-block;
 	border-radius: 20%;
 	border-width: 0.03em;
 	transition: 0.3s ease;
 }
 
-.icn:hover
-{
+.icn:hover {
 	height: 3em;
 	width: 3em;
 	line-height: 3em;
