@@ -59,11 +59,11 @@ h1, h2 {
 .icn {
 	text-align: center;
 	vertical-align: middle;
-	font-size: 2em;
+	font-size: 3em;
 	color: white;
-	height: 2em;
-	width: 2em;
-	line-height: 2em;
+	height: 3em;
+	width: 3em;
+	line-height: 3em;
 	display: inline-block;
 	border-radius: 20%;
 	border-width: 0.03em;
