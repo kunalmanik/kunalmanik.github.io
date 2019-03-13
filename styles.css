@@ -20,6 +20,14 @@ body {
     position: absolute;
 }
 
+.flex-content::before {
+    content: "";
+}
+  
+.flex-content::after {
+    content: "";
+}
+
 h1 {
     font-family: 'Raleway', 'Helvetica', 'Arial', sans-serif;
     font-size: 6em;
