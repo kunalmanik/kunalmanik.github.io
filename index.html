@@ -9,7 +9,16 @@
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#fff;overflow:hidden;}
 
-    body{background:linear-gradient(45deg,#2b0010,#660033,#ff3366,#ff6699);background-size:400% 400%;animation:bgShift 15s ease infinite;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;}
+    body{
+      background:linear-gradient(45deg,#2b0010,#660033,#ff3366,#ff6699);
+      background-size:400% 400%;
+      animation:bgShift 15s ease infinite;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      position:relative;
+    }
     @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
     canvas#heartCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
@@ -27,7 +36,6 @@
     .card .status{margin-top:8px;font-size:13px;color:#ffb4c6}
     .card .openBtn{margin-top:10px;padding:8px 10px;border-radius:10px;border:0;background:linear-gradient(90deg,#ff6699,#ff3366);color:white;cursor:pointer;font-weight:600;transition:opacity 0.2s}
     .card .openBtn:hover{opacity:0.8}
-    .unlocked-msg{padding:12px;margin-top:10px;border-radius:10px;background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.2);font-size:15px;color:#fff}
 
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:10;display:none}
     .modal{background:rgba(255,255,255,0.15);color:#fff;padding:20px;border-radius:12px;width:340px;box-shadow:0 18px 40px rgba(0,0,0,0.45);animation:popIn 0.3s ease;backdrop-filter:blur(12px)}
@@ -74,15 +82,15 @@
 
   <script>
     const items = [
-      {date:'2025-11-05', title:'Day 1 — A Whisper', question:'Your first ever catch-phrase out of pure Love!', answers:['I Just a Baby'], message:'Placeholder message for Day 1.', wrongHint:'Seriously? What Has happened to my Baby? 💖'},
-      {date:'2025-11-06', title:'Day 2 — A Tease', question:'The Place you can hold me to turn me on to 500%!', answers:['Butt', 'Thigh'], message:'Placeholder message for Day 2.', wrongHint:'Almost… try again 😘 This can have 2 correct answers Babe! Just chose one!'},
-      {date:'2025-11-07', title:'Day 3 — Soft Candle', question:'Your most talked token of remembrance from our first ever date (of all time)!', answers:['Bruschetta'], message:'Placeholder message for Day 3.', wrongHint:'Not quite, love ❤️. You should know the menu for this one!'},
-      {date:'2025-11-08', title:'Day 4 — Late Night', question:'A reference of "sexy" from our late evening date! ', answers:['savvyy'], message:'Placeholder message for Day 4.', wrongHint:'To guess this better - Think of the Ram Laddu 😉'},
-      {date:'2025-11-09', title:'Day 5 — Sweet Promise', question:'The place on you, with the most possible kisses!', answers:['Neck'], message:'Placeholder message for Day 5.', wrongHint:'Try again, darling 😘. Risky place to show without concealer!'},
-      {date:'2025-11-10', title:'Day 6 — The Dance', question:'WIP', answers:['WIP'], message:'Placeholder message for Day 6.', wrongHint:'Not this time ❤️'},
-      {date:'2025-11-11', title:'Day 7 — Almost There', question:'WIP', answers:['WIP'], message:'Placeholder message for Day 7.', wrongHint:'Close, but no 😏'},
-      {date:'2025-11-12', title:'Day 8 — The Night', question:'WIP', answers:['WIP'], message:'Placeholder message for Day 8.', wrongHint:'Not yet… 💖'},
-      {date:'2025-11-13', title:'Day 9 — The Day after The Night', question:'WIP', answers:['WIP'], message:'Placeholder message for Day 9.', wrongHint:'Hmm, not right 😘'}
+      {date:'2025-11-05', title:'Day 1 — A Whisper', question:'Your first ever catch-phrase out of pure Love!', answers:['i just a baby'], message:'Your personalized Day 1 message ❤️', wrongHint:'Seriously? What happened to my Baby? 💖'},
+      {date:'2025-11-06', title:'Day 2 — A Tease', question:'The Place you can hold me to turn me on to 500%!', answers:['butt','thigh'], message:'Your personalized Day 2 message ❤️', wrongHint:'Almost… try again 😘 This can have 2 correct answers!'},
+      {date:'2025-11-07', title:'Day 3 — Soft Candle', question:'Your most talked token of remembrance from our first ever date (of all time)!', answers:['bruschetta'], message:'Your personalized Day 3 message ❤️', wrongHint:'Not quite, love ❤️. You should know the menu!'},
+      {date:'2025-11-08', title:'Day 4 — Late Night', question:'A reference of "sexy" from our late evening date! ', answers:['savvyy'], message:'Your personalized Day 4 message ❤️', wrongHint:'To guess this better - Think of the Ram Laddu 😉'},
+      {date:'2025-11-09', title:'Day 5 — Sweet Promise', question:'The place on you, with the most possible kisses!', answers:['neck'], message:'Your personalized Day 5 message ❤️', wrongHint:'Try again, darling 😘. Risky place to show!'},
+      {date:'2025-11-10', title:'Day 6 — The Dance', question:'WIP', answers:['wip'], message:'Your personalized Day 6 message ❤️', wrongHint:'Not this time ❤️'},
+      {date:'2025-11-11', title:'Day 7 — Almost There', question:'WIP', answers:['wip'], message:'Your personalized Day 7 message ❤️', wrongHint:'Close, but no 😏'},
+      {date:'2025-11-12', title:'Day 8 — The Night', question:'WIP', answers:['wip'], message:'Your personalized Day 8 message ❤️', wrongHint:'Not yet… 💖'},
+      {date:'2025-11-13', title:'Day 9 — The Day after The Night', question:'WIP', answers:['wip'], message:'Your personalized Day 9 message ❤️', wrongHint:'Hmm, not right 😘'}
     ];
 
     const storageKey='romance_unlocked';
@@ -99,7 +107,7 @@
         const isUnlocked=unlocked.has(it.date);
         const card=document.createElement('div');
         card.className='card'+(isUnlocked?' unlocked':' locked');
-        card.innerHTML=`<div class="day">${it.title}</div><div class="date">${formatDate(it.date)}</div><div class="status">${isUnlocked?'🔓 Unlocked':'🔒 Locked'}</div><div class="unlocked-msg" style="display:${isUnlocked?'block':'none'}">${it.message}</div><button class="openBtn">Open</button>`;
+        card.innerHTML=`<div class="day">${it.title}</div><div class="date">${formatDate(it.date)}</div><div class="status">${isUnlocked?'🔓 Unlocked':'🔒 Locked'}</div><button class="openBtn">Open</button>`;
         card.querySelector('.openBtn').addEventListener('click',()=>{
           if(it.date>todayIso()){
             document.getElementById('earlyModal').style.display='flex';
@@ -140,6 +148,7 @@
         unlocked.add(it.date);
         localStorage.setItem(storageKey,JSON.stringify([...unlocked]));
         modal.style.display='none';
+        alert(it.message); // Show personalized message as popup
         buildCards();
       } else {
         modalHint.innerText=it.wrongHint;
@@ -150,7 +159,7 @@
 
     buildCards();
 
-    // Heart animation
+    // Heart animation with sparkle/glow
     const canvas=document.getElementById('heartCanvas');
     const ctx=canvas.getContext('2d');
     let hearts=[];
@@ -158,10 +167,17 @@
     window.addEventListener('resize',resizeCanvas);
     resizeCanvas();
 
-    function drawHeart(x,y,size,color){
+    function drawHeart(x, y, size, color, rotation) {
       ctx.save();
-      ctx.translate(x,y);
-      ctx.scale(size,size);
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.scale(size, size);
+
+      // Glow shadow
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 10;
+
+      // Heart shape
       ctx.beginPath();
       ctx.moveTo(0, -5);
       ctx.bezierCurveTo(-5,-15,-25,-15,-25,0);
@@ -169,21 +185,52 @@
       ctx.bezierCurveTo(0,25,25,15,25,0);
       ctx.bezierCurveTo(25,-15,5,-15,0,-5);
       ctx.closePath();
-      ctx.fillStyle=color;
+      ctx.fillStyle = color;
       ctx.fill();
+
+      // Small sparkle dots
+      for (let i = 0; i < 2; i++) {
+        const sx = (Math.random() - 0.5) * 30;
+        const sy = (Math.random() - 0.5) * 30;
+        ctx.beginPath();
+        ctx.arc(sx, sy, Math.random() * 2 + 1, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + Math.random() * 0.7 + ')';
+        ctx.fill();
+      }
+
       ctx.restore();
     }
 
-    function addHeart(x,y){
-      hearts.push({x,y,vx:(Math.random()-0.5)*2,vy:(Math.random()*-2-1),size:Math.random()*1+1.5,life:1,color:`hsl(${Math.random()*360},100%,70%)`});
+    function addHeart(x, y){
+      hearts.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 6,
+        vy: (Math.random() * -4 - 2),
+        size: Math.random() * 1 + 2,
+        rotation: Math.random() * Math.PI * 2,
+        vRot: (Math.random() - 0.5) * 0.2,
+        life: 1,
+        color: `hsl(${Math.random() * 360},100%,70%)`
+      });
     }
 
-    document.addEventListener('click',e=>{for(let i=0;i<10;i++) addHeart(e.clientX,e.clientY);});
+    document.addEventListener('click', e => {
+      for (let i = 0; i < 20; i++) addHeart(e.clientX, e.clientY);
+    });
 
-    function animate(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      hearts.forEach(h=>{drawHeart(h.x,h.y,h.size,h.color);h.x+=h.vx;h.y+=h.vy;h.vy+=0.02;h.life-=0.01;});
-      hearts=hearts.filter(h=>h.life>0);
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      hearts.forEach(h => {
+        drawHeart(h.x, h.y, h.size, h.color, h.rotation);
+        h.x += h.vx;
+        h.y += h.vy;
+        h.vy += 0.05;
+        h.rotation += h.vRot;
+        h.size *= 0.98;
+        h.life -= 0.02;
+      });
+      hearts = hearts.filter(h => h.life > 0 && h.size > 0.3);
       requestAnimationFrame(animate);
     }
     animate();
