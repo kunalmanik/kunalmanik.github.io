@@ -1,124 +1,181 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>8-Day Countdown for My Love ❤️</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>9‑Day Romantic Countdown</title>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ffe6eb, #fffaf0);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      text-align: center;
-      color: #333;
-    }
-    h1 { font-size: 1.8em; margin-bottom: 10px; }
-    .card {
-      background: white;
-      padding: 2rem;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-width: 500px;
-    }
-    .hidden { display: none; }
-    button {
-      background-color: #ff6699;
-      border: none;
-      color: white;
-      padding: 0.6rem 1.2rem;
-      border-radius: 1rem;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    button:hover { background-color: #ff3366; }
-    input {
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
-      padding: 0.4rem 0.8rem;
-      font-size: 1rem;
-    }
-    .message {
-      margin-top: 1rem;
-      font-size: 1.1em;
-      line-height: 1.5;
-      animation: fadeIn 1s ease forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#fff;overflow:hidden;}
+
+    body{background:linear-gradient(45deg,#2b0010,#660033,#ff3366,#ff6699);background-size:400% 400%;animation:bgShift 15s ease infinite;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;}
+    @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    canvas#heartCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+    .container{width:100%;max-width:900px;z-index:2;position:relative;text-align:center;padding:20px;}
+    h1{font-family:'Playfair Display',serif;font-size:32px;margin-bottom:10px;text-shadow:0 0 10px rgba(255,255,255,0.3)}
+    p.lead{color:rgba(255,255,255,0.9);font-size:16px;margin-bottom:10px}
+    #todayLabel{font-weight:600;margin-top:5px;font-size:14px;color:#fff}
+
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:20px}
+    .card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:16px;border-radius:14px;box-shadow:0 0 15px rgba(0,0,0,0.4);transition:transform 0.3s ease;text-align:center}
+    .card:hover{transform:scale(1.03)}
+    .card .day{font-weight:700;font-size:18px}
+    .card .date{font-size:13px;margin-top:6px;color:#ffdfe8}
+    .card .status{margin-top:8px;font-size:13px;color:#ffb4c6}
+    .card .openBtn{margin-top:10px;padding:8px 10px;border-radius:10px;border:0;background:linear-gradient(90deg,#ff6699,#ff3366);color:white;cursor:pointer;font-weight:600;transition:opacity 0.2s}
+    .card .openBtn:hover{opacity:0.8}
+    .unlocked-msg{padding:12px;margin-top:10px;border-radius:10px;background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.2);font-size:15px;color:#fff}
+
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:10;display:none}
+    .modal{background:rgba(255,255,255,0.15);color:#fff;padding:20px;border-radius:12px;width:340px;box-shadow:0 18px 40px rgba(0,0,0,0.45);animation:popIn 0.3s ease;backdrop-filter:blur(12px)}
+    @keyframes popIn{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+    .modal h3{margin:0 0 8px;font-family:'Playfair Display';color:#fff}
+    .modal p{margin:0 0 12px;color:#fff}
+    .modal input{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc}
+    .modal .row{display:flex;gap:8px;margin-top:10px}
+    .modal .btn{flex:1;padding:10px;border-radius:8px;border:0;background:linear-gradient(90deg,#ff3366,#ff6699);color:white;cursor:pointer;font-weight:600}
+    #modalHint{margin-top:8px;color:#ffdfe8;font-weight:600}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1 id="title">💖 8-Day Countdown 💖</h1>
-    <p id="subtitle">Let's see what today holds...</p>
-    <div id="questionBox" class="hidden">
-      <p id="questionText"></p>
-      <input type="text" id="answerInput" placeholder="Your answer..." />
-      <br />
-      <button id="submitBtn">Unlock</button>
+  <canvas id="heartCanvas"></canvas>
+
+  <div class="container">
+    <h1>9‑Day Countdown — For You</h1>
+    <p class="lead">The Big Day Build-Up — click each card on its date to answer and unlock a <i>personalized</i> message.</p>
+    <span id="todayLabel"></span>
+
+    <div class="cards" id="cards"></div>
+  </div>
+
+  <div id="modal" class="modal-backdrop">
+    <div class="modal">
+      <h3 id="modalTitle">Unlock</h3>
+      <p id="modalQuestion">Question goes here</p>
+      <input id="modalInput" type="text" placeholder="Enter your answer..." autocomplete="off" />
+      <div class="row">
+        <button id="modalCancel" class="btn" style="background:#ddd;color:#222">Cancel</button>
+        <button id="modalSubmit" class="btn">Unlock</button>
+      </div>
+      <div id="modalHint"></div>
     </div>
-    <div id="messageBox" class="hidden">
-      <p class="message" id="messageText"></p>
+  </div>
+
+  <div id="earlyModal" class="modal-backdrop">
+    <div class="modal">
+      <h3>Too Early!</h3>
+      <p>Patience, love 😉 This message will be available on its special day.</p>
+      <button onclick="document.getElementById('earlyModal').style.display='none'" class="btn">OK</button>
     </div>
-    <p id="hintText" style="margin-top:1rem;color:#777;"></p>
   </div>
 
   <script>
-    // Configure your event date and messages here
-    const messages = [
-      { date: '2025-11-05', title: 'Day 8 – The Beginning before the Beginning', question: 'Our first ice cream flavor?', answer: 'chocolate', message: '7 days to go! I still remember that first ice cream... it melted slower than my heart did 😄' },
-      { date: '2025-11-06', title: 'Day 7 – The Beginning', question: 'Our first ice cream flavor?', answer: 'chocolate', message: '7 days to go! I still remember that first ice cream... it melted slower than my heart did 😄' },
-      { date: '2025-11-07', title: 'Day 6 – The Little Things', question: 'What’s my favorite breakfast?', answer: 'aaloo parantha', message: 'You always tease me about my love for paranthas. Guess who’s winning breakfast duty forever? 😋' },
-      { date: '2025-11-08', title: 'Day 5 – The Calm', question: 'What helps me relax instantly?', answer: 'your smile', message: 'Every stress fades when I see you smile. That’s the calm I never knew I needed.' },
-      { date: '2025-11-09', title: 'Day 4 – The Fun', question: 'Which game did we laugh the hardest playing?', answer: 'ludo', message: 'We may never agree on who cheated, but we always end up laughing till our stomachs hurt 😂' },
-      { date: '2025-11-10', title: 'Day 3 – The Dream', question: 'Where do we want to travel first?', answer: 'amalfi', message: 'That Amalfi trip is closer than you think. I’m already picturing us there 🌊🍋' },
-      { date: '2025-11-11', title: 'Day 2 – The Vow', question: 'What’s one word that defines us?', answer: 'team', message: 'We’ve always been a team — through chaos, calm, and everything in between 🤝' },
-      { date: '2025-11-12', title: 'Day 1 – The Forever', question: 'Who’s my forever person?', answer: 'you', message: 'Tomorrow, I get to call you my wife. Nothing feels more right than that ❤️' }
+    const items = [
+      {date:'2025-11-05', title:'Day 1 — A Whisper', question:'(placeholder)', answers:['answer1','yes'], message:'Placeholder message for Day 1.'},
+      {date:'2025-11-06', title:'Day 2 — A Tease', question:'(placeholder)', answers:['answer2','ok'], message:'Placeholder message for Day 2.'},
+      {date:'2025-11-07', title:'Day 3 — Soft Candle', question:'(placeholder)', answers:['answer3'], message:'Placeholder message for Day 3.'},
+      {date:'2025-11-08', title:'Day 4 — Late Night', question:'(placeholder)', answers:['answer4'], message:'Placeholder message for Day 4.'},
+      {date:'2025-11-09', title:'Day 5 — Sweet Promise', question:'(placeholder)', answers:['answer5'], message:'Placeholder message for Day 5.'},
+      {date:'2025-11-10', title:'Day 6 — The Dance', question:'(placeholder)', answers:['answer6'], message:'Placeholder message for Day 6.'},
+      {date:'2025-11-11', title:'Day 7 — Almost There', question:'(placeholder)', answers:['answer7'], message:'Placeholder message for Day 7.'},
+      {date:'2025-11-12', title:'Day 8 — The Night', question:'(placeholder)', answers:['answer8'], message:'Placeholder message for Day 8.'},
+      {date:'2025-11-13', title:'Day 9 — The Night after Night', question:'(placeholder)', answers:['answer9'], message:'Placeholder message for Day 9.'}
     ];
 
-    const today = new Date().toISOString().split('T')[0];
-    const todayMsg = messages.find(m => m.date === today);
-    const titleEl = document.getElementById('title');
-    const subtitleEl = document.getElementById('subtitle');
-    const qBox = document.getElementById('questionBox');
-    const qText = document.getElementById('questionText');
-    const input = document.getElementById('answerInput');
-    const submitBtn = document.getElementById('submitBtn');
-    const mBox = document.getElementById('messageBox');
-    const mText = document.getElementById('messageText');
-    const hintText = document.getElementById('hintText');
+    const storageKey='romance_unlocked';
+    const unlocked=new Set(JSON.parse(localStorage.getItem(storageKey)||'[]'));
 
-    if (!todayMsg) {
-      titleEl.innerText = '⏳ Not yet!';
-      subtitleEl.innerText = 'The countdown continues... come back tomorrow 💫';
-      hintText.innerText = `Next message unlocks soon.`;
-    } else {
-      titleEl.innerText = todayMsg.title;
-      subtitleEl.classList.add('hidden');
-      qBox.classList.remove('hidden');
-      qText.innerText = todayMsg.question;
+    function formatDate(dstr){const d=new Date(dstr+'T00:00:00');return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});}
+    function todayIso(){const n=new Date();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;}
 
-      submitBtn.onclick = () => {
-        if (input.value.trim().toLowerCase() === todayMsg.answer.toLowerCase()) {
-          qBox.classList.add('hidden');
-          mBox.classList.remove('hidden');
-          mText.innerText = todayMsg.message;
-        } else {
-          hintText.innerText = 'Try again 😜';
-          input.value = '';
-        }
-      };
+    const cardsEl=document.getElementById('cards');
+
+    function buildCards(){
+      cardsEl.innerHTML='';
+      items.forEach((it,idx)=>{
+        const isUnlocked=unlocked.has(it.date);
+        const card=document.createElement('div');
+        card.className='card'+(isUnlocked?' unlocked':' locked');
+        card.innerHTML=`<div class="day">${it.title}</div><div class="date">${formatDate(it.date)}</div><div class="status">${isUnlocked?'🔓 Unlocked':'🔒 Locked'}</div><div class="unlocked-msg" style="display:${isUnlocked?'block':'none'}">${it.message}</div><button class="openBtn">Open</button>`;
+        card.querySelector('.openBtn').addEventListener('click',()=>{
+          if(it.date>todayIso()){
+            document.getElementById('earlyModal').style.display='flex';
+          } else {
+            openModal(idx);
+          }
+        });
+        cardsEl.appendChild(card);
+      });
+      document.getElementById('todayLabel').innerText='Today: '+formatDate(todayIso());
     }
+
+    let activeIndex=null;
+    const modal=document.getElementById('modal');
+    const modalTitle=document.getElementById('modalTitle');
+    const modalQuestion=document.getElementById('modalQuestion');
+    const modalInput=document.getElementById('modalInput');
+    const modalSubmit=document.getElementById('modalSubmit');
+    const modalCancel=document.getElementById('modalCancel');
+    const modalHint=document.getElementById('modalHint');
+
+    function openModal(idx){
+      activeIndex=idx;
+      const it=items[idx];
+      modalTitle.innerText=it.title;
+      modalQuestion.innerText=it.question;
+      modalInput.value='';
+      modalHint.innerText='';
+      modal.style.display='flex';
+      setTimeout(()=>modalInput.focus(),100);
+    }
+
+    modalCancel.onclick=()=>modal.style.display='none';
+    modalSubmit.onclick=()=>{
+      const ans=modalInput.value.trim().toLowerCase();
+      const it=items[activeIndex];
+      if(it.answers.map(a=>a.toLowerCase()).includes(ans)){
+        unlocked.add(it.date);
+        localStorage.setItem(storageKey,JSON.stringify([...unlocked]));
+        modal.style.display='none';
+        buildCards();
+      } else {
+        modalHint.innerText='Not quite — try again 😉';
+        modalInput.value='';
+        modalInput.focus();
+      }
+    };
+
+    buildCards();
+
+    // Heart animation
+    const canvas=document.getElementById('heartCanvas');
+    const ctx=canvas.getContext('2d');
+    let hearts=[];
+    function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+    window.addEventListener('resize',resizeCanvas);
+    resizeCanvas();
+
+    function drawHeart(x,y,size,color){
+      ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI);ctx.scale(size,size);
+      ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(0,-3,3,-3,3,0);ctx.bezierCurveTo(3,3,0,5,0,8);ctx.bezierCurveTo(0,5,-3,3,-3,0);ctx.bezierCurveTo(-3,-3,0,-3,0,0);ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.restore();
+    }
+
+    function addHeart(x,y){
+      hearts.push({x,y,vx:(Math.random()-0.5)*2,vy:Math.random()*-2-1,size:Math.random()*1+0.7,life:1,color:`hsl(${Math.random()*20+340},100%,70%)`});
+    }
+
+    document.addEventListener('click',e=>{for(let i=0;i<10;i++) addHeart(e.clientX,e.clientY);});
+
+    function animate(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      hearts.forEach(h=>{drawHeart(h.x,h.y,h.size,h.color);h.x+=h.vx;h.y+=h.vy;h.vy+=0.02;h.life-=0.01;});
+      hearts=hearts.filter(h=>h.life>0);
+      requestAnimationFrame(animate);
+    }
+    animate();
   </script>
 </body>
 </html>
-
-
