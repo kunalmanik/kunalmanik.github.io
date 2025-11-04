@@ -213,14 +213,15 @@
 
     function animate(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      hearts.forEach(h=>{
-        drawHeart(h.x,h.y,h.size,h.color,h.rotation);
-        h.x+=h.vx;
-        h.y+=h.vy;
-        h.vy+=0.02;
-        h.rotation+=h.vRot;
-        h.size*=0.995;
-        h.life-=0.005;
+      hearts.forEach((h, i) => {
+        const bounce = Math.sin(Date.now() * 0.005 + i) * 0.5; // subtle bounce
+        drawHeart(h.x, h.y + bounce, h.size, h.color, h.rotation);
+        h.x += h.vx;
+        h.y += h.vy;
+        h.vy += 0.02;
+        h.rotation += h.vRot;
+        h.size *= 0.995;
+        h.life -= 0.005;
       });
       hearts=hearts.filter(h=>h.life>0 && h.size>0.3);
       requestAnimationFrame(animate);
@@ -229,3 +230,4 @@
   </script>
 </body>
 </html>
+
