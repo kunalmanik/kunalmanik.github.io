@@ -1,71 +1,422 @@
-<!DOCTYPE HTML>
+<!--
+7-Day Countdown Website for GitHub Pages — ENCRYPTION + PERSONALIZED MESSAGES
+File: index.html (single-file site with hash-based multi-page behavior)
+
+What I added in this version:
+- Fully personalized messages (drafted for you) inside the MESSAGES array. These are in plaintext in the file so you can review/edit them easily.
+- A built-in client-side encryption utility: a "Lock" button that derives an AES‑GCM key from a passphrase and outputs an encrypted JSON blob you can paste back into the file as `MESSAGES_ENC` (along with a flag `USE_ENCRYPTED=true`). This lets you keep the repo public while storing only ciphertext.
+- A UI to "Unlock" when you (or your partner) visit the page and enter the passphrase — messages decrypt in the browser and reveal only on their scheduled date.
+- Clear instructions and privacy notes in the Settings page.
+
+Important privacy note (read before publishing publicly):
+- Plaintext messages in `MESSAGES` are visible to anyone who can see the repo. To avoid this, after finalizing the messages locally, use the Lock tool in the site (Settings -> Lock messages) to produce an encrypted payload, then replace the `MESSAGES` array with an empty array and set `USE_ENCRYPTED=true` and paste the encrypted payload into `MESSAGES_ENC` in the file before pushing to your public repo.
+- If you'd like, I can also produce the encrypted blob for you here, but that would require a passphrase you give me (I recommend you keep it secret and not send it over chat). Safer: run the Lock tool locally and copy/paste the output.
+
+Deployment:
+1. Edit this file as needed (especially `EVENT_LABEL` and `MESSAGES`).
+2. Push to a GitHub Pages repo (e.g., <your-username>.github.io). File path: index.html at repo root.
+3. Open the site: https://<your-username>.github.io/
+
+-->
+
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
-    <title>Kunal Manik</title>
-    
-    <link rel="stylesheet" href="styles.css">
-
-    <link href="https://fonts.googleapis.com/css?family=Lora|Montserrat:500|Poppins:200,400" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:800,400" rel="stylesheet" type="text/css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>7‑Day Countdown — For My To‑Be Wife</title>
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#fb7185;--muted:#9aa7bf;--glass:rgba(255,255,255,0.04)}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    body{background:linear-gradient(180deg,#071029 0%, #07182a 60%);color:#e6eef9;display:flex;align-items:center;justify-content:center;padding:18px}
+    .wrap{width:100%;max-width:980px}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#f97316);display:flex;align-items:center;justify-content:center;font-weight:700}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.03)}
+    nav{display:flex;gap:8px;flex-wrap:wrap}
+    a.button{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:var(--muted);text-decoration:none}
+    a.button.active{border-color:var(--accent);color:var(--accent);box-shadow:0 6px 18px rgba(251,115,133,0.06)}
+    ul.day-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+    li.day{padding:10px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);text-align:center}
+    .num{font-size:18px;font-weight:700}
+    .sub{color:var(--muted);font-size:13px}
+    .big{font-size:48px;font-weight:800;letter-spacing:-1px}
+    .muted{color:var(--muted)}
+    .countdown{display:flex;gap:6px;align-items:center}
+    .count-pill{background:var(--glass);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.02)}
+    .message{white-space:pre-wrap;font-size:16px;line-height:1.5}
+    .locked{opacity:0.95}
+    footer{margin-top:16px;color:var(--muted);font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    .danger{color:#ffb4b4}
+    label{display:block;margin-top:8px}
+    input,textarea,select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    textarea{min-height:100px}
+    .row{display:flex;gap:8px}
+    .col{flex:1}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}.card{padding:12px}.logo{width:52px;height:52px}}
+  </style>
 </head>
-
 <body>
-    <div id="particles-js">
-        
-            <div class="flex-content">
-                    <div>
-                        <h1>Kunal Manik</h1>
-                    </div>
-                                                                    
-                    <div class = "icons">
-            
-                        <span class="box">
-                            <a class="icn" href="https://www.github.com/kunalmanik95">
-                                <span class="fa fa-github"></span>
-                            </a>
-                        </span>
-            
-                        <span class="box">
-                            <a class="icn" href="https://www.linkedin.com/in/kunal-manik-097790130/">
-                                <span class="fa fa-linkedin"></span>
-                            </a>
-                        </span>
-            
-                        <span class="box">
-                            <a class="icn" href="https://www.facebook.com/manik.kunal">
-                                <span class="fa fa-facebook"></span>
-                            </a>
-                        </span>
-            
-                        <span class="box">
-                            <a class="icn" href="https://www.quora.com/profile/Kunal-Manik">
-                                <span class="fa fa-quora"></span>
-                            </a>
-                        </span>
-            
-                        <span class="box">
-                            <a class="icn" href="mailto:kunalmanik95@gmail.com">
-                                <span class="fa fa-envelope-o"></span>
-                            </a>
-                        </span>
-            
-                    </div>                
+  <div class="wrap">
+    <header>
+      <div class="logo">♥︎</div>
+      <div>
+        <h1>7‑Day Countdown — For My To‑Be Wife</h1>
+        <p class="lead">Messages unlock only on the date shown (local to Asia/Kolkata by default). Use Settings to lock messages for public repos.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main class="card" id="mainCard">
+        <!-- dynamic content -->
+      </main>
+
+      <aside>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div>
+              <div class="small">Countdown</div>
+              <div id="globalCountdown" class="big">—</div>
             </div>
-        
+            <div style="text-align:right">
+              <div class="small">Timezone</div>
+              <div class="muted" id="tzLabel">Asia/Kolkata</div>
+            </div>
+          </div>
+
+          <nav id="nav"></nav>
+
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:12px 0">
+          <div class="small muted">Quick links</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <a class="button" href="#/all">All days</a>
+            <a class="button" id="openNext" href="#">Open next</a>
+            <a class="button" id="settingsBtn" href="#/settings">Settings</a>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card">
+          <div class="small muted">Privacy</div>
+          <p class="muted small">This is a static page. For truly private messages, use the Lock tool to encrypt and publish only ciphertext. Keep the passphrase secret.</p>
+        </div>
+      </aside>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <footer>Made with ❤️ by Kunal · Edit messages and deploy to GitHub Pages. Use the Settings page to lock/encrypt for public repos.</footer>
+  </div>
 
-    <script>
-        particlesJS.load('particles-js', 'particles.json', function() {
-            console.log('particles.json loaded...');
+  <script>
+    /* ---------------- USER CONFIG ----------------
+       Edit these values below. Dates in YYYY-MM-DD.
+       TIMEZONE: default Asia/Kolkata.
+       USE_ENCRYPTED: when true, site expects MESSAGES_ENC to be present and will try to decrypt with passphrase at unlock.
+       Workflow:
+         - During development, keep USE_ENCRYPTED=false and write messages in MESSAGES (plaintext).
+         - When ready to publish publicly: open Settings -> Lock messages -> enter a passphrase -> click "Lock" -> copy the encrypted JSON blob and paste into MESSAGES_ENC, set USE_ENCRYPTED=true, and remove plaintext messages from MESSAGES (or leave empty array). Then push the updated file.
+    ------------------------------------------------*/
+
+    const EVENT_LABEL = 'Our Wedding';
+    const TIMEZONE = 'Asia/Kolkata';
+
+    // If you want the encrypted mode, set USE_ENCRYPTED to true and fill MESSAGES_ENC with the ciphertext JSON.
+    const USE_ENCRYPTED = false;
+
+    // Plaintext messages (for review/edit locally). Customize these messages — they're already personalized.
+    const MESSAGES = [
+      {date:'2025-11-10', title:'Day 7 — The Beginning', message:`7 days until our day. I still remember the first time I saw you — how your smile caught me off guard and I knew something had changed in me. — Kunal`},
+      {date:'2025-11-11', title:'Day 6 — A Memory', message:`I keep replaying our walk by the lake. You laughed and I felt at home. Thank you for trusting me with your time and heart.`},
+      {date:'2025-11-12', title:'Day 5 — Relax', message:`Take this as a gentle nudge: breathe. Tonight, let me handle dinner and the rest — just relax.`},
+      {date:'2025-11-13', title:'Day 4 — A Small Promise', message:`I promise to learn to make your favourite breakfast every Sunday — and improve every week.`},
+      {date:'2025-11-14', title:'Day 3 — Something Fun', message:`A little surprise waits for you — I can't reveal here, but bring your curious self.`},
+      {date:'2025-11-15', title:'Day 2 — Deep Note', message:`Two days left. I wrote our vows draft — would you read it with me? Your edits will mean the world.`},
+      {date:'2025-11-16', title:'Day 1 — Tomorrow', message:`One more sleep. I can't wait to call you my wife. See you at the altar — love, Kunal.`}
+    ];
+
+    // Encrypted messages placeholder. When USE_ENCRYPTED=true, fill this with the encrypted blob produced by the 'Lock' tool in Settings.
+    // Format: {items:[{date:'YYYY-MM-DD',title:'',payload:'base64(salt+iv+tag+ciphertext)'}], meta:{createdAt:'...'}}
+    const MESSAGES_ENC = null; // paste encrypted JSON blob here when using encrypted mode
+
+    /* ----------------- END CONFIG ----------------- */
+
+    // Utility: timezone-aware date string
+    function toTZDateString(date, tz){
+      const parts = new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+      const y = parts.find(p=>p.type==='year').value;
+      const m = parts.find(p=>p.type==='month').value;
+      const d = parts.find(p=>p.type==='day').value;
+      return `${y}-${m}-${d}`;
+    }
+
+    function daysBetweenDates(a,b){
+      const msPerDay = 24*60*60*1000;
+      const diff = Math.ceil((b - a) / msPerDay);
+      return diff;
+    }
+
+    function parseDateYMD(ymd){
+      const [y,m,d] = ymd.split('-').map(Number);
+      return new Date(Date.UTC(y,m-1,d));
+    }
+
+    // Build nav
+    function buildNav(items){
+      const nav = document.getElementById('nav');
+      nav.innerHTML = '';
+      items.forEach((m,idx)=>{
+        const a = document.createElement('a');
+        a.href = `#/day/${idx+1}`;
+        a.className = 'button';
+        a.textContent = `Day ${idx+1}`;
+        nav.appendChild(a);
+      });
+    }
+
+    // Render view
+    async function renderView(route, items){
+      const main = document.getElementById('mainCard');
+      if(!route) route = location.hash || '#/all';
+      document.getElementById('tzLabel').textContent = TIMEZONE;
+      const now = new Date();
+      const todayStr = toTZDateString(now, TIMEZONE);
+
+      const upcoming = items.map(m=>m.date).filter(d=>d>=todayStr).sort();
+      let globalText = '—';
+      if(upcoming.length){
+        const next = upcoming[0];
+        const daysLeft = daysBetweenDates(parseDateYMD(todayStr), parseDateYMD(next));
+        globalText = daysLeft<=0? 'Today' : `${daysLeft} day${daysLeft>1?'s':''}`;
+      }
+      document.getElementById('globalCountdown').textContent = globalText;
+
+      if(route.startsWith('#/day/')){
+        const parts = route.split('/');
+        const idx = Number(parts[2]) - 1;
+        if(idx<0 || idx>=items.length){ main.innerHTML = '<h2>Not found</h2>'; return; }
+        const item = items[idx];
+        const isToday = (item.date === todayStr);
+        const daysLeft = daysBetweenDates(parseDateYMD(todayStr), parseDateYMD(item.date));
+
+        main.innerHTML = `
+          <h2 style="margin-top:0">${item.title}</h2>
+          <div class="small muted">Date: ${item.date} · Day ${idx+1}</div>
+          <div style="height:10px"></div>
+          <div class="countdown">
+            <div class="count-pill">${daysLeft<=0? 'Today' : (daysLeft + ' day' + (daysLeft>1?'s':''))}</div>
+            <div class="muted">${isToday? 'This message is unlocked.' : 'This message is locked until its date.'}</div>
+          </div>
+          <div style="height:14px"></div>
+        `;
+
+        if(isToday){
+          // show message (plaintext or decrypted message stored in item.message)
+          const msgDiv = document.createElement('div');
+          msgDiv.className = 'message';
+          msgDiv.textContent = item.message || item.decrypted || 'Message could not be loaded.';
+          main.appendChild(msgDiv);
+
+          const note = document.createElement('div');
+          note.style.marginTop = '14px';
+          note.className = 'small muted';
+          note.textContent = 'You can copy this message, print it, or read aloud together.';
+          main.appendChild(note);
+        } else {
+          const lock = document.createElement('div');
+          lock.className = 'locked small muted';
+          lock.innerHTML = `<div style=\"padding:14px;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);\">
+            <div style=\"font-weight:700;font-size:18px;margin-bottom:6px\">Locked</div>
+            <div>Come back on <strong>${item.date}</strong> to read this message.</div>
+          </div>`;
+          main.appendChild(lock);
+        }
+
+        const allLink = document.createElement('div');
+        allLink.style.marginTop = '18px';
+        allLink.innerHTML = `<a href="#/all" class='button'>Back to all days</a>`;
+        main.appendChild(allLink);
+
+      } else if(route === '#/all' || route === '#/' ){
+        main.innerHTML = '<h2 style="margin-top:0">All days</h2>';
+        const ul = document.createElement('ul');
+        ul.className = 'day-list';
+        const todayStr = toTZDateString(new Date(), TIMEZONE);
+        items.forEach((m,idx)=>{
+          const li = document.createElement('li');
+          li.className = 'day';
+          const isToday = (m.date === todayStr);
+          const daysLeft = daysBetweenDates(parseDateYMD(todayStr), parseDateYMD(m.date));
+          li.innerHTML = `
+            <div class='num'>Day ${idx+1}</div>
+            <div class='sub'>${m.title}</div>
+            <div style='height:6px'></div>
+            <div class='small'>${m.date}</div>
+            <div style='height:8px'></div>
+            <div class='countdown'>
+              <div class='count-pill'>${daysLeft<=0? 'Today' : daysLeft + 'd'}</div>
+              <div class='muted' style='font-size:13px'>&nbsp;${isToday? 'Unlocked':'Locked'}</div>
+            </div>
+            <div style='height:8px'></div>
+            <a class='button' href='#/day/${idx+1}'>Open</a>
+          `;
+          ul.appendChild(li);
         });
-    </script>
-</body>
+        main.appendChild(ul);
+      } else if(route === '#/settings'){
+        main.innerHTML = `
+          <h2 style=\"margin-top:0\">Settings & Encryption</h2>
+          <div class=\"small muted\">Deployment: Edit messages locally, then use the Lock tool to produce ciphertext for a public repo.</div>
+          <div style=\"height:12px\"></div>
+          <div class=\"small muted\"><strong>Encryption tools</strong></div>
+          <div style=\"height:8px\"></div>
+          <div class=\"small\">1) Lock messages (create ciphertext): Choose a passphrase you will keep secret. Click Lock to generate an encrypted blob you can paste back into this file under <code>MESSAGES_ENC</code>.</div>
+          <div style=\"height:8px\"></div>
+          <label>Passphrase to Lock (keep this secret):</label>
+          <div class=\"row\"><input id=\"lockPass\" placeholder=\"Enter passphrase to encrypt\"><button id=\"doLock\" class=\"button\">Lock</button></div>
+          <div style=\"height:8px\"></div>
+          <label>Encrypted output (copy this and paste into the file as MESSAGES_ENC):</label>
+          <textarea id=\"encOut\" readonly></textarea>
 
+          <div style=\"height:12px\"></div>
+          <div class=\"small\">2) Unlock messages (when using encrypted mode): Visit the site, go to Settings → Unlock, and enter the passphrase to decrypt in the browser.</div>
+          <div style=\"height:8px\"></div>
+          <label>Passphrase to Unlock:</label>
+          <div class=\"row\"><input id=\"unlockPass\" placeholder=\"Enter passphrase to decrypt\"><button id=\"doUnlock\" class=\"button\">Unlock</button></div>
+          <div style=\"height:8px\"></div>
+          <div class=\"small muted\">Instructions: After generating the encrypted blob with <em>Lock</em>, open this HTML locally, replace the MESSAGES array with an empty array (or remove it), set <code>USE_ENCRYPTED=true</code>, and paste the encrypted blob JSON into the <code>MESSAGES_ENC</code> variable in the file. Then push to GitHub Pages. When you (or your partner) open the page, they will be prompted to Unlock with the passphrase and messages will decrypt client-side only.</div>
+        `;
+
+        // add event listeners for lock/unlock
+        setTimeout(()=>{
+          document.getElementById('doLock').addEventListener('click', async ()=>{
+            const pass = document.getElementById('lockPass').value;
+            if(!pass){ alert('Enter a passphrase first'); return; }
+            // derive key, encrypt current plaintext MESSAGES
+            const blob = await lockMessages(pass, MESSAGES);
+            document.getElementById('encOut').value = JSON.stringify(blob, null, 2);
+          });
+
+          document.getElementById('doUnlock').addEventListener('click', async ()=>{
+            const pass = document.getElementById('unlockPass').value;
+            if(!pass){ alert('Enter passphrase to unlock'); return; }
+            // try to decrypt MESSAGES_ENC (must be present)
+            if(!MESSAGES_ENC){ alert('No encrypted blob found in the file. Paste MESSAGES_ENC into the file first.'); return; }
+            try{
+              const decrypted = await unlockMessages(pass, MESSAGES_ENC);
+              // replace items in memory and re-render
+              window.__decrypted_items = decrypted.items.map(it=>({date:it.date,title:it.title,message:it.plain}));
+              alert('Unlocked in memory — visit All days or specific day. Note: this does not modify the file on disk.');
+              renderView('#/all', window.__decrypted_items);
+            }catch(e){
+              console.error(e);
+              alert('Failed to decrypt — wrong passphrase or corrupted blob.');
+            }
+          });
+        },100);
+
+      } else {
+        main.innerHTML = '<h2 style="margin-top:0">Not found</h2>';
+      }
+
+      document.querySelectorAll('a.button').forEach(a=>a.classList.remove('active'));
+      const active = document.querySelector(`a[href='${route.split('?')[0]}']`);
+      if(active) active.classList.add('active');
+    }
+
+    // Lock/Encrypt messages (client-side) -> returns {items:[{date,title,payload}], meta:{createdAt}}
+    async function lockMessages(passphrase, items){
+      // derive key using PBKDF2, then AES-GCM per message with random iv and per-file random salt
+      const enc = new TextEncoder();
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(passphrase), {name:'PBKDF2'}, false, ['deriveKey']);
+      const key = await crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:200000,hash:'SHA-256'}, keyMaterial, {name:'AES-GCM',length:256}, true, ['encrypt','decrypt']);
+      const out = [];
+      for(const it of items){
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const plain = enc.encode(it.message || it.plain || '');
+        const ct = await crypto.subtle.encrypt({name:'AES-GCM',iv:iv}, key, plain);
+        // package: salt(16) + iv(12) + ciphertext
+        const packaged = new Uint8Array(salt.byteLength + iv.byteLength + ct.byteLength);
+        packaged.set(salt,0); packaged.set(iv,salt.byteLength); packaged.set(new Uint8Array(ct), salt.byteLength + iv.byteLength);
+        const payload = arrayBufferToBase64(packaged.buffer);
+        out.push({date:it.date,title:it.title,payload});
+      }
+      return {items:out,meta:{createdAt:new Date().toISOString()}};
+    }
+
+    // Unlock/decrypt given MESSAGES_ENC blob with passphrase
+    async function unlockMessages(passphrase, blob){
+      if(!blob || !blob.items) throw new Error('Invalid blob');
+      const enc = new TextEncoder();
+      const dec = new TextDecoder();
+      const results = [];
+      for(const it of blob.items){
+        const bin = base64ToArrayBuffer(it.payload);
+        const view = new Uint8Array(bin);
+        const salt = view.slice(0,16);
+        const iv = view.slice(16,28);
+        const ct = view.slice(28);
+        const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(passphrase), {name:'PBKDF2'}, false, ['deriveKey']);
+        const key = await crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:200000,hash:'SHA-256'}, keyMaterial, {name:'AES-GCM',length:256}, true, ['encrypt','decrypt']);
+        const plain = await crypto.subtle.decrypt({name:'AES-GCM',iv:iv}, key, ct);
+        results.push({date:it.date,title:it.title,plain:dec.decode(plain)});
+      }
+      return {items:results,meta:blob.meta};
+    }
+
+    // helpers
+    function arrayBufferToBase64(buffer){
+      const bytes = new Uint8Array(buffer);
+      let binary = '';
+      for(let i=0;i<bytes.byteLength;i++) binary += String.fromCharCode(bytes[i]);
+      return btoa(binary);
+    }
+    function base64ToArrayBuffer(b64){
+      const binary = atob(b64);
+      const len = binary.length;
+      const bytes = new Uint8Array(len);
+      for(let i=0;i<len;i++) bytes[i]=binary.charCodeAt(i);
+      return bytes.buffer;
+    }
+
+    // open next
+    function openNext(items){
+      const todayStr = toTZDateString(new Date(), TIMEZONE);
+      let idx = items.findIndex(m=>m.date>=todayStr);
+      if(idx===-1) idx = items.length-1;
+      location.hash = `#/day/${idx+1}`;
+    }
+
+    // initialize
+    async function init(){
+      // choose source items: if decrypted in memory use that, else if USE_ENCRYPTED true we need to prompt to unlock, otherwise use MESSAGES plaintext
+      let items = [];
+      if(window.__decrypted_items) items = window.__decrypted_items;
+      else if(USE_ENCRYPTED){
+        // encrypted mode: require passphrase from settings unlock flow before showing messages. For now show placeholders and nav.
+        items = (MESSAGES_ENC && MESSAGES_ENC.items) ? MESSAGES_ENC.items.map(it=>({date:it.date,title:it.title, message:null})) : [];
+      } else {
+        items = MESSAGES.map(it=>({date:it.date,title:it.title,message:it.message}));
+      }
+      buildNav(items);
+      if(!location.hash) location.hash = '#/all';
+      await renderView(location.hash, items);
+
+      window.addEventListener('hashchange', ()=>{
+        // if unlocked in memory, use that
+        const use = window.__decrypted_items || items;
+        renderView(location.hash, use);
+      });
+
+      document.getElementById('openNext').addEventListener('click',(e)=>{e.preventDefault(); openNext(window.__decrypted_items || items)});
+    }
+
+    // start
+    init();
+  </script>
+</body>
 </html>
