@@ -170,20 +170,37 @@
     window.addEventListener('resize',resizeCanvas);
     resizeCanvas();
 
-    function drawHeart(x,y,size,color,opacity,bounce){
+    function drawHeart(x, y, size, color, opacity, bounce) {
       ctx.save();
       ctx.globalAlpha = opacity;
-      ctx.translate(x,y-bounce);
-      ctx.scale(size,size);
+      ctx.translate(x, y - bounce);
+      ctx.scale(size, size);
+
+      // Heart shape
       ctx.beginPath();
       ctx.moveTo(0, -5);
-      ctx.bezierCurveTo(-5,-15,-25,-15,-25,0);
-      ctx.bezierCurveTo(-25,15,0,25,0,35);
-      ctx.bezierCurveTo(0,25,25,15,25,0);
-      ctx.bezierCurveTo(25,-15,5,-15,0,-5);
+      ctx.bezierCurveTo(-5, -15, -25, -15, -25, 0);
+      ctx.bezierCurveTo(-25, 15, 0, 25, 0, 35);
+      ctx.bezierCurveTo(0, 25, 25, 15, 25, 0);
+      ctx.bezierCurveTo(25, -15, 5, -15, 0, -5);
       ctx.closePath();
-      ctx.fillStyle=color;
+      ctx.fillStyle = color;
       ctx.fill();
+
+      // Sparkle effect
+      if (Math.random() < 0.2) { // 20% chance for sparkles each frame
+        const sparkleCount = Math.floor(Math.random() * 3 + 1);
+        for (let i = 0; i < sparkleCount; i++) {
+          const sx = (Math.random() - 0.5) * 30;
+          const sy = (Math.random() - 0.5) * 30;
+          const sr = Math.random() * 2 + 1;
+          ctx.beginPath();
+          ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.8 + 0.2})`;
+          ctx.fill();
+        }
+      }
+
       ctx.restore();
     }
 
