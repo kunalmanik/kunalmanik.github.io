@@ -74,15 +74,15 @@
 
   <script>
     const items = [
-      {date:'2025-11-05', title:'Day 1 — A Whisper', question:'(placeholder)', answers:['answer1','yes'], message:'Placeholder message for Day 1.'},
-      {date:'2025-11-06', title:'Day 2 — A Tease', question:'(placeholder)', answers:['answer2','ok'], message:'Placeholder message for Day 2.'},
-      {date:'2025-11-07', title:'Day 3 — Soft Candle', question:'(placeholder)', answers:['answer3'], message:'Placeholder message for Day 3.'},
-      {date:'2025-11-08', title:'Day 4 — Late Night', question:'(placeholder)', answers:['answer4'], message:'Placeholder message for Day 4.'},
-      {date:'2025-11-09', title:'Day 5 — Sweet Promise', question:'(placeholder)', answers:['answer5'], message:'Placeholder message for Day 5.'},
-      {date:'2025-11-10', title:'Day 6 — The Dance', question:'(placeholder)', answers:['answer6'], message:'Placeholder message for Day 6.'},
-      {date:'2025-11-11', title:'Day 7 — Almost There', question:'(placeholder)', answers:['answer7'], message:'Placeholder message for Day 7.'},
-      {date:'2025-11-12', title:'Day 8 — The Night', question:'(placeholder)', answers:['answer8'], message:'Placeholder message for Day 8.'},
-      {date:'2025-11-13', title:'Day 9 — The Night after Night', question:'(placeholder)', answers:['answer9'], message:'Placeholder message for Day 9.'}
+      {date:'2025-11-05', title:'Day 1 — A Whisper', question:'Your first ever catch-phrase out of pure Love!', answers:['I Just a Baby'], message:'Placeholder message for Day 1.', wrongHint:'Seriously? What Has happened to my Baby? 💖'},
+      {date:'2025-11-06', title:'Day 2 — A Tease', question:'The Place you can hold me to turn me on to 500%!', answers:['Butt', 'Thigh'], message:'Placeholder message for Day 2.', wrongHint:'Almost… try again 😘 This can have 2 correct answers Babe! Just chose one!'},
+      {date:'2025-11-07', title:'Day 3 — Soft Candle', question:'Your most talked token of remembrance from our first ever date (of all time)!', answers:['Bruschetta'], message:'Placeholder message for Day 3.', wrongHint:'Not quite, love ❤️. You should know the menu for this one!'},
+      {date:'2025-11-08', title:'Day 4 — Late Night', question:'A reference of "sexy" from our late evening date! ', answers:['savvyy'], message:'Placeholder message for Day 4.', wrongHint:'To guess this better - Think of the Ram Laddu 😉'},
+      {date:'2025-11-09', title:'Day 5 — Sweet Promise', question:'The place on you, with the most possible kisses!', answers:['Neck'], message:'Placeholder message for Day 5.', wrongHint:'Try again, darling 😘. Risky place to show without concealer!'},
+      {date:'2025-11-10', title:'Day 6 — The Dance', question:'WIP', answers:['WIP'], message:'Placeholder message for Day 6.', wrongHint:'Not this time ❤️'},
+      {date:'2025-11-11', title:'Day 7 — Almost There', question:'WIP', answers:['WIP'], message:'Placeholder message for Day 7.', wrongHint:'Close, but no 😏'},
+      {date:'2025-11-12', title:'Day 8 — The Night', question:'WIP', answers:['WIP'], message:'Placeholder message for Day 8.', wrongHint:'Not yet… 💖'},
+      {date:'2025-11-13', title:'Day 9 — The Day after The Night', question:'WIP', answers:['WIP'], message:'Placeholder message for Day 9.', wrongHint:'Hmm, not right 😘'}
     ];
 
     const storageKey='romance_unlocked';
@@ -142,7 +142,7 @@
         modal.style.display='none';
         buildCards();
       } else {
-        modalHint.innerText='Not quite — try again 😉';
+        modalHint.innerText=it.wrongHint;
         modalInput.value='';
         modalInput.focus();
       }
@@ -159,12 +159,23 @@
     resizeCanvas();
 
     function drawHeart(x,y,size,color){
-      ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI);ctx.scale(size,size);
-      ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(0,-3,3,-3,3,0);ctx.bezierCurveTo(3,3,0,5,0,8);ctx.bezierCurveTo(0,5,-3,3,-3,0);ctx.bezierCurveTo(-3,-3,0,-3,0,0);ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.restore();
+      ctx.save();
+      ctx.translate(x,y);
+      ctx.scale(size,size);
+      ctx.beginPath();
+      ctx.moveTo(0, -5);
+      ctx.bezierCurveTo(-5,-15,-25,-15,-25,0);
+      ctx.bezierCurveTo(-25,15,0,25,0,35);
+      ctx.bezierCurveTo(0,25,25,15,25,0);
+      ctx.bezierCurveTo(25,-15,5,-15,0,-5);
+      ctx.closePath();
+      ctx.fillStyle=color;
+      ctx.fill();
+      ctx.restore();
     }
 
     function addHeart(x,y){
-      hearts.push({x,y,vx:(Math.random()-0.5)*2,vy:Math.random()*-2-1,size:Math.random()*1+0.7,life:1,color:`hsl(${Math.random()*20+340},100%,70%)`});
+      hearts.push({x,y,vx:(Math.random()-0.5)*2,vy:(Math.random()*-2-1),size:Math.random()*1+1.5,life:1,color:`hsl(${Math.random()*360},100%,70%)`});
     }
 
     document.addEventListener('click',e=>{for(let i=0;i<10;i++) addHeart(e.clientX,e.clientY);});
