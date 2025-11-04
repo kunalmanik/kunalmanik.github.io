@@ -66,7 +66,7 @@
       <p id="modalQuestion">Question goes here</p>
       <input id="modalInput" type="text" placeholder="Enter your answer..." autocomplete="off" />
       <div class="row">
-        <button id="modalCancel" class="btn" style="background:#ddd;color:#222">Cancel</button>
+        <button id="modalCancel" class="btn" style="background:#ddd;color:#222">Close</button>
         <button id="modalSubmit" class="btn">Unlock</button>
       </div>
       <div id="modalHint"></div>
@@ -100,9 +100,7 @@
         const card=document.createElement('div');
         card.className='card';
         card.innerHTML=`<div class="day">${it.title}</div><div class="date">${formatDate(it.date)}</div><button class="openBtn">Open</button>`;
-        card.querySelector('.openBtn').addEventListener('click',()=>{
-          openOrEarly(idx);
-        });
+        card.querySelector('.openBtn').addEventListener('click',()=>{ openOrEarly(idx); });
         cardsEl.appendChild(card);
       });
       document.getElementById('todayLabel').innerText='Today: '+formatDate(todayIso());
@@ -115,7 +113,6 @@
     const modalSubmit=document.getElementById('modalSubmit');
     const modalCancel=document.getElementById('modalCancel');
     const modalHint=document.getElementById('modalHint');
-
     let activeIndex=null;
 
     function openOrEarly(idx){
@@ -138,6 +135,7 @@
     }
 
     modalCancel.onclick=()=>modal.style.display='none';
+
     modalSubmit.onclick=async ()=>{
       const ans = modalInput.value.trim().toLowerCase();
       const it = items[activeIndex];
@@ -164,7 +162,7 @@
 
     buildCards();
 
-    // Heart animation - retained from last version
+    // Heart animation with bounce and fade-in
     const canvas=document.getElementById('heartCanvas');
     const ctx=canvas.getContext('2d');
     let hearts=[];
@@ -172,9 +170,10 @@
     window.addEventListener('resize',resizeCanvas);
     resizeCanvas();
 
-    function drawHeart(x,y,size,color){
+    function drawHeart(x,y,size,color,opacity,bounce){
       ctx.save();
-      ctx.translate(x,y);
+      ctx.globalAlpha = opacity;
+      ctx.translate(x,y-bounce);
       ctx.scale(size,size);
       ctx.beginPath();
       ctx.moveTo(0, -5);
@@ -189,14 +188,25 @@
     }
 
     function addHeart(x,y){
-      hearts.push({x,y,vx:(Math.random()-0.5)*2,vy:(Math.random()*-2-1),size:Math.random()*1+1.5,life:1,color:`hsl(${Math.random()*360},100%,70%)`});
+      hearts.push({
+        x,y,
+        vx:(Math.random()-0.5)*2,
+        vy:(Math.random()*-1.5-0.5),
+        size:Math.random()*1+1.5,
+        life:1,
+        color:`hsl(${Math.random()*360},100%,70%)`,
+        bounce:Math.random()*3
+      });
     }
 
     document.addEventListener('click',e=>{for(let i=0;i<10;i++) addHeart(e.clientX,e.clientY);});
 
     function animate(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      hearts.forEach(h=>{drawHeart(h.x,h.y,h.size,h.color);h.x+=h.vx;h.y+=h.vy;h.vy+=0.02;h.life-=0.01;});
+      hearts.forEach(h=>{
+        drawHeart(h.x,h.y,h.size,h.color,Math.min(1,h.life),Math.sin((1-h.life)*Math.PI)*h.bounce);
+        h.x+=h.vx; h.y+=h.vy; h.vy+=0.01; h.life-=0.005;
+      });
       hearts=hearts.filter(h=>h.life>0);
       requestAnimationFrame(animate);
     }
